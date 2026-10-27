@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Hello Git</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fa;
+      --surface: #ffffff;
+      --text: #1d2330;
+      --muted: #5b6475;
+      --accent: #f05133;
+      --accent-text: #ffffff;
+      --border: #dde2ea;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --bg: #14171c;
+        --surface: #1e232b;
+        --text: #e8ecf2;
+        --muted: #9aa3b2;
+        --accent: #ff7a5c;
+        --accent-text: #14171c;
+        --border: #2d3440;
+      }
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #14171c;
+      --surface: #1e232b;
+      --text: #e8ecf2;
+      --muted: #9aa3b2;
+      --accent: #ff7a5c;
+      --accent-text: #14171c;
+      --border: #2d3440;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: env(safe-area-inset-top, 0px) 1rem env(safe-area-inset-bottom, 0px);
+    }
+
+    main {
+      width: 100%;
+      max-width: 520px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    }
+
+    .logo {
+      font-size: 3rem;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      margin: 0 0 0.5rem;
+      font-size: clamp(1.8rem, 5vw, 2.4rem);
+    }
+
+    p {
+      color: var(--muted);
+      margin: 0 0 1.5rem;
+      line-height: 1.5;
+    }
+
+    button {
+      background: var(--accent);
+      color: var(--accent-text);
+      border: none;
+      border-radius: 10px;
+      padding: 0.75rem 1.4rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.1s ease, opacity 0.2s ease;
+    }
+    button:hover { opacity: 0.9; }
+    button:active { transform: scale(0.97); }
+
+    #counter {
+      margin-top: 1.25rem;
+      font-variant-numeric: tabular-nums;
+      color: var(--text);
+      font-weight: 600;
+      min-height: 1.5em;
+    }
+
+    .status {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      background: var(--bg);
+      padding: 0.15em 0.4em;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="logo" aria-hidden="true">🌿</div>
+    <h1>Hello Git</h1>
+    <p>Wenn du diese Seite siehst, funktioniert der Weg von GitHub über Plesk bis zum Webspace.</p>
+
+    <button id="btn" type="button">Zähler erhöhen</button>
+    <div id="counter" aria-live="polite">Klicks: 0</div>
+
+    <div class="status">
+      Stand: <code id="stamp">wird geladen …</code>
+    </div>
+  </main>
+
+  <script>
+    let clicks = 0;
+    const btn = document.getElementById("btn");
+    const counter = document.getElementById("counter");
+    const stamp = document.getElementById("stamp");
+
+    btn.addEventListener("click", () => {
+      clicks += 1;
+      counter.textContent = "Klicks: " + clicks;
+    });
+
+    stamp.textContent = new Date().toLocaleString("de-DE");
+  </script>
+</body>
+</html>
