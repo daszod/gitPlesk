@@ -1,0 +1,9 @@
+{
+  "name": "node-test",
+  "version": "1.0.0",
+  "description": "Einfacher Node.js-Testserver zur Pruefung, ob Node.js auf dem Server ausgefuehrt werden kann.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  }
+}
