@@ -119,6 +119,87 @@
       padding: 0.15em 0.4em;
       border-radius: 6px;
     }
+
+    .todo {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      text-align: left;
+    }
+
+    .todo h2 {
+      margin: 0 0 1rem;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+
+    .todo-form {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .todo-form input {
+      flex: 1;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .todo-form button {
+      padding: 0.6rem 1rem;
+    }
+
+    #todo-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    #todo-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.5rem 0.6rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    #todo-list li span {
+      flex: 1;
+      word-break: break-word;
+    }
+
+    #todo-list li.done span {
+      text-decoration: line-through;
+      color: var(--muted);
+    }
+
+    #todo-list li button {
+      background: transparent;
+      color: var(--muted);
+      padding: 0.2rem 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 400;
+    }
+
+    #todo-list li button:hover {
+      color: var(--accent);
+      opacity: 1;
+    }
+
+    #todo-empty {
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+      margin: 0;
+    }
   </style>
 </head>
 <body>
@@ -132,6 +213,16 @@
 
     <div class="status">
       Stand: <code id="stamp">wird geladen …</code>
+    </div>
+
+    <div class="todo">
+      <h2>To-Do-Liste</h2>
+      <form id="todo-form" class="todo-form">
+        <input id="todo-input" type="text" placeholder="Neue Aufgabe …" autocomplete="off">
+        <button type="submit">Hinzufügen</button>
+      </form>
+      <ul id="todo-list"></ul>
+      <p id="todo-empty">Keine Aufgaben – gut gemacht!</p>
     </div>
   </main>
 
@@ -147,6 +238,70 @@
     });
 
     stamp.textContent = new Date().toLocaleString("de-DE");
+
+    const todoForm = document.getElementById("todo-form");
+    const todoInput = document.getElementById("todo-input");
+    const todoList = document.getElementById("todo-list");
+    const todoEmpty = document.getElementById("todo-empty");
+    const STORAGE_KEY = "hello-git-todos";
+
+    let todos = [];
+    try {
+      todos = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    } catch {
+      todos = [];
+    }
+
+    function save() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+    }
+
+    function render() {
+      todoList.innerHTML = "";
+      todoEmpty.style.display = todos.length ? "none" : "block";
+
+      todos.forEach((todo, index) => {
+        const li = document.createElement("li");
+        li.className = todo.done ? "done" : "";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = todo.done;
+        checkbox.addEventListener("change", () => {
+          todos[index].done = checkbox.checked;
+          save();
+          render();
+        });
+
+        const span = document.createElement("span");
+        span.textContent = todo.text;
+
+        const removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.textContent = "✕";
+        removeBtn.setAttribute("aria-label", "Aufgabe löschen");
+        removeBtn.addEventListener("click", () => {
+          todos.splice(index, 1);
+          save();
+          render();
+        });
+
+        li.append(checkbox, span, removeBtn);
+        todoList.appendChild(li);
+      });
+    }
+
+    todoForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const text = todoInput.value.trim();
+      if (!text) return;
+      todos.push({ text, done: false });
+      todoInput.value = "";
+      save();
+      render();
+    });
+
+    render();
   </script>
 </body>
 </html>
